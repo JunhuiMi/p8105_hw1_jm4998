@@ -9,11 +9,11 @@ output: github_document
 library(tidyverse)
 ```
 
-The purpose of this homework is to work with data and present plots using `ggplot`.
+The purpose of this homework is to work with data and present plots using _ggplot_.
 
 ## Problem 1
 
-First I create a dataframe `df_1` containing variables for problem 1.
+First I create a dataframe _df_1_ containing variables for problem 1.
 
 ```{r df_1_create}
 df_1 = tibble(
@@ -37,7 +37,7 @@ mean(df_1$fact)
 
 I find that mean function works for numeric and logical variables but not for character and factor variables.
 
-I try to apply `as.numeric` function to change logical, character, and factor variables into numeric variables.
+I try to apply "as.numeric" function to change logical, character, and factor variables into numeric variables.
 
 ```{r df_1_numeric, results = 'hide', warning = FALSE}
 as.numeric(df_1$norm_samp_pos)
@@ -62,7 +62,7 @@ It shows that numeric variables can do calculation while factor variables can no
 
 ## Problem 2
 
-First I create a dataframe `df_2` containing variables for my plots.
+First I create a dataframe _df_2_ containing variables for my plots.
 
 ```{r df_2_create, eval = TRUE}
 df_2 = tibble(
@@ -74,14 +74,38 @@ df_2 = tibble(
 )
 ```
 
-The size of the dataset is `nrow(df_2)` rows and `ncol(df_2)` columns.
-The mean of x is `mean(df_2$x)`, the median of x is `median(df_2$x)`, and the  standard deviation of x is `sd(df_2$x)`.
-The proportion of cases for which x + y > 1 is `sum(df_2$num)/500`
+The size of the dataset is `r nrow(df_2)` rows and `r ncol(df_2)` columns.
 
-Then I show three scatterplots of `y` vs `x`. 
+The mean of x is `r mean(df_2$x)`, the median of x is `r median(df_2$x)`, and the  standard deviation of x is `r sd(df_2$x)`.
 
-```{r yx_scatter}
+The proportion of cases for which x + y > 1 is `r sum(df_2$num)/500`
+
+Then I show three scatterplots of _y_ vs _x_. 
+
+_Plot 1_
+
+```{r yx_scatter_1}
 ggplot(df_2, aes(x = x, y = y, color = df_2$logi)) + geom_point()
+ggsave("my first scatterplot for HW1.png")
+```
+
+_Plot 2_
+```{r yx_scatter_2}
 ggplot(df_2, aes(x = x, y = y, color = df_2$num)) + geom_point()
+```
+
+_Plot 3_
+```{r yx_scatter_3}
 ggplot(df_2, aes(x = x, y = y, color = df_2$fac)) + geom_point()
 ```
+
+The results above shows that:
+
+(1) For all three plots, arrays are divided into two groups: 
+one group is "x + y > 1" and the other is "x + y <= 1"
+
+(2) ggplot has its color scale for logical variables "TRUE" and "FALSE", which is shown as pink dots and green dots in Plot 1.
+
+(3) ggplot has a gradient color between 0 and 1, from dark blue to light blue, as is shown in Plot 2.
+
+(4) If factor variables only contain levels of "TRUE" and "FALSE", then ggplot color scale is same as logical variables, as is shown in Plot 3.
