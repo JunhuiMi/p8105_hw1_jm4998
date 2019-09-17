@@ -29,10 +29,10 @@ df_1 = tibble(
 Then I take the mean of each variable in my dataframe to check if it works.
 
 ```{r df_1_mean}
-mean(df_1$norm_samp)
-mean(df_1$norm_samp_pos)
-mean(df_1$chara)
-mean(df_1$fact)
+mean(pull(df_1, norm_samp))
+mean(pull(df_1, norm_samp_pos))
+mean(pull(df_1, chara))
+mean(pull(df_1, fact))
 ```
 
 I find that mean function works for numeric and logical variables but not for character and factor variables.
@@ -40,9 +40,9 @@ I find that mean function works for numeric and logical variables but not for ch
 I try to apply "as.numeric" function to change logical, character, and factor variables into numeric variables.
 
 ```{r df_1_numeric, results = 'hide', warning = FALSE}
-as.numeric(df_1$norm_samp_pos)
-as.numeric(df_1$chara)
-as.numeric(df_1$fact)
+as.numeric(pull(df_1, norm_samp_pos))
+as.numeric(pull(df_1, chara))
+as.numeric(pull(df_1, fact))
 ```
 
 The results show that logic variables can be changed to numeric variables 0 and 1. However, character and factor variables can not be changed directly because their values are unknown. It counts for the mean function not working on character and factor variables.
@@ -50,11 +50,12 @@ The results show that logic variables can be changed to numeric variables 0 and 
 Finally, I do calculation using those variables.
 
 ```{r df_1_computation}
-logic_num <- as.numeric(df_1$norm_samp_pos) * df_1$norm_samp
+logic_num <- as.numeric(pull(df_1, norm_samp_pos)) * pull(df_1, norm_samp)
 logic_num
-logic_fact <- as.factor(df_1$norm_samp_pos) * df_1$norm_samp
+logic_fact <- as.factor(pull(df_1, norm_samp_pos)) * pull(df_1, norm_samp)
 logic_fact
-logic_fact_num <- as.numeric(as.factor(df_1$norm_samp_pos)) * df_1$norm_samp
+logic_fact_num <- as.numeric(as.factor(pull(df_1, norm_samp_pos))) * 
+  pull(df_1, norm_samp)
 logic_fact_num
 ```
 
@@ -76,36 +77,36 @@ df_2 = tibble(
 
 The size of the dataset is `r nrow(df_2)` rows and `r ncol(df_2)` columns.
 
-The mean of x is `r mean(df_2$x)`, the median of x is `r median(df_2$x)`, and the  standard deviation of x is `r sd(df_2$x)`.
+The mean of x is `r mean(pull(df_2, x))`, the median of x is `r median(pull(df_2, x))`, and the  standard deviation of x is `r sd(pull(df_2, x))`.
 
-The proportion of cases for which x + y > 1 is `r sum(df_2$num)/500`
+The proportion of cases for which x + y > 1 is `r sum(pull(df_2, num))/500`
 
 Then I show three scatterplots of _y_ vs _x_. 
 
 _Plot 1_
 
 ```{r yx_scatter_1}
-ggplot(df_2, aes(x = x, y = y, color = df_2$logi)) + geom_point()
+ggplot(df_2, aes(x = x, y = y, color = pull(df_2, logi))) + geom_point()
 ggsave("my first scatterplot for HW1.png")
 ```
 
 _Plot 2_
 ```{r yx_scatter_2}
-ggplot(df_2, aes(x = x, y = y, color = df_2$num)) + geom_point()
+ggplot(df_2, aes(x = x, y = y, color = pull(df_2, num))) + geom_point()
 ```
 
 _Plot 3_
 ```{r yx_scatter_3}
-ggplot(df_2, aes(x = x, y = y, color = df_2$fac)) + geom_point()
+ggplot(df_2, aes(x = x, y = y, color = pull(df_2, fac))) + geom_point()
 ```
 
 The results above shows that:
 
-(1) For all three plots, arrays are divided into two groups: 
+**(1)** For all three plots, arrays are divided into two groups: 
 one group is "x + y > 1" and the other is "x + y <= 1"
 
-(2) ggplot has its color scale for logical variables "TRUE" and "FALSE", which is shown as pink dots and green dots in Plot 1.
+**(2)** ggplot has its color scale for logical variables "TRUE" and "FALSE", which is shown as pink dots and green dots in Plot 1.
 
-(3) ggplot has a gradient color between 0 and 1, from dark blue to light blue, as is shown in Plot 2.
+**(3)** ggplot has a gradient color between 0 and 1, from dark blue to light blue, as is shown in Plot 2.
 
-(4) If factor variables only contain levels of "TRUE" and "FALSE", then ggplot color scale is same as logical variables, as is shown in Plot 3.
+**(4)** If factor variables only contain levels of "TRUE" and "FALSE", then ggplot color scale is same as logical variables, as is shown in Plot 3.
